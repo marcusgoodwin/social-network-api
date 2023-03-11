@@ -5,8 +5,8 @@ module.exports = {
 // Get all thoughts
 getAllThoughts : async (req, res) => {
   try {
-    const thoughts = await Thought.find({});
-    res.json(thoughts);
+    const thought = await Thought.find();
+    res.json(thought);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Server error" });
@@ -102,16 +102,16 @@ deleteThought : async (req, res) => {
  createReaction: async (req, res) => {
   try {
     const thoughtId = req.params.thoughtId;
-    const reaction = await Reaction.create(req.body);
-    const thought = await Thought.findByIdAndUpdate(
-      thoughtId,
-      { $push: { reactions: reaction._id } },
+    const reaction = req.body;
+    const thought = await Thought.findOneAndUpdate(
+      {_id: thoughtId},
+      { $push: { reactions: reaction } },
       { new: true }
     );
     if (!thought) {
       return res.status(404).json({ error: "Thought not found" });
     }
-    res.json(reaction);
+    res.json(thought);
   } catch (err){
   res.status(500).json({ error: "Server error" });
 }
@@ -134,7 +134,7 @@ getReaction: async (req, res) => {
 // Delete a reaction by id
 deleteReaction: async (req, res) => {
   try {
-    const reaction = await Reaction.findByIdAndDelete(req.params.reactionId);
+    const reaction = await Reaction.findOneAndDelete(req.params.reactionId);
     if (!reaction) {
       return res.status(404).json({ error: "Reaction not found" });
     }

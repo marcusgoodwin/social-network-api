@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ReactionSchema = new mongoose.Schema(
+const reactionSchema = new mongoose.Schema(
   {
     reactionBody: {
       type: String,
@@ -25,4 +25,4 @@ const ReactionSchema = new mongoose.Schema(
   }
 );
 
-module.exports = ReactionSchema;
+module.exports = reactionSchema;
